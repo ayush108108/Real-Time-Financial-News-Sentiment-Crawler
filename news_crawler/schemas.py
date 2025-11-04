@@ -23,15 +23,42 @@ class RawArticle(BaseModel):
     def _parse_datetime(cls, value: Optional[str]) -> Optional[datetime]:
         if value is None or isinstance(value, datetime):
             return value
-        for fmt in (
+            
+        # Common RSS date formats to try
+        formats = [
+            # Standard RSS format with timezone
             "%a, %d %b %Y %H:%M:%S %z",
+            # ISO 8601 with timezone
+            "%Y-%m-%dT%H:%M:%S%z",
+            # ISO 8601 with Zulu time
             "%Y-%m-%dT%H:%M:%SZ",
+            # Date only
+            "%Y-%m-%d",
+            # Common web format
             "%Y-%m-%d %H:%M:%S",
-        ):
+            # With timezone offset without colon
+            "%Y-%m-%d %H:%M:%S%z",
+            # RFC 822/1123 format
+            "%a, %d %b %Y %H:%M:%S %Z",
+            # CNBC format (if different)
+            "%a, %d %b %Y %H:%M:%S %z",
+            # Fallback for dates like '2023-04-15T12:34:56.789Z'
+            "%Y-%m-%dT%H:%M:%S.%fZ",
+        ]
+        
+        for fmt in formats:
             try:
+                # Try with the format as-is
                 return datetime.strptime(value, fmt)
             except ValueError:
-                continue
+                # Try stripping whitespace and trying again
+                try:
+                    return datetime.strptime(value.strip(), fmt)
+                except (ValueError, AttributeError):
+                    continue
+        
+        # If we get here, log the unparsable date for debugging
+        print(f"Warning: Could not parse date: {value}")
         return None
 
 

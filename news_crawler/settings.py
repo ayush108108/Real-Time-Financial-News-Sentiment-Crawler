@@ -14,12 +14,12 @@ class Settings(BaseSettings):
     """Runtime configuration loaded from environment variables or defaults."""
 
     reuters_feed_url: str = Field(
-        default="https://feeds.reuters.com/reuters/businessNews",
-        description="Reuters RSS feed providing business headlines.",
+        default="https://www.reutersagency.com/feed/?best-topics=business-finance&post_type=best",
+        description="Reuters RSS feed providing business and finance headlines.",
     )
     cnbc_feed_url: str = Field(
-        default="https://www.cnbc.com/id/10001169/device/rss/rss.html",
-        description="CNBC RSS feed offering finance headlines.",
+        default="https://www.cnbc.com/id/100003114/device/rss/rss.html",
+        description="CNBC RSS feed offering top business news.",
     )
     http_timeout_seconds: int = Field(default=15, ge=5, le=60)
     user_agent: str = Field(default="RealTimeFinancialNewsCrawler/0.1")
