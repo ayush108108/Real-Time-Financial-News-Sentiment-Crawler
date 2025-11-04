@@ -85,3 +85,5 @@ All runtime settings can be tweaked via environment variables (prefixed with `CR
 
 ## License
 MIT (pending). Update with your org’s licensing requirements.
+
+Disclaimer: This is a non-commercial project for educational and portfolio purposes only. 
